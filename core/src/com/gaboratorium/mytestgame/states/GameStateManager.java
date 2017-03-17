@@ -43,4 +43,9 @@ public class GameStateManager
     {
         states.peek().render(sb);
     }
+
+    public State peek()
+    {
+        return states.peek();
+    }
 }
