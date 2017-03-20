@@ -3,6 +3,7 @@ package com.gaboratorium.mytestgame.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -10,10 +11,6 @@ import com.gaboratorium.mytestgame.MyTestGame;
 import com.gaboratorium.mytestgame.sprites.Bird;
 import com.gaboratorium.mytestgame.sprites.Coin;
 import com.gaboratorium.mytestgame.sprites.Tube;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
-import java.awt.geom.Rectangle2D;
-import java.util.Random;
 
 /**
  * Created by root on 3/7/17.
@@ -77,7 +74,7 @@ public class PlayState extends State
                 Boolean interacted = false;
                 for (Coin coin: coins)
                 {
-                    Rectangle2D bounds = new Rectangle2D.Float(coin.getPosition().x, coin.getPosition().y, coin.getTexture().getWidth(), coin.getTexture().getHeight());
+                    Rectangle bounds = new Rectangle(coin.getPosition().x, coin.getPosition().y, coin.getTexture().getWidth(), coin.getTexture().getHeight());
                     if (bounds.contains(tp.x, tp.y))
                     {
                         coin.explode();
@@ -119,7 +116,7 @@ public class PlayState extends State
 
                 if (camPos > tubePos)
                 {
-                    int number = (int) Math.floor(Math.random() * cam.viewportHeight);
+                    int number = (int) Math.floor(Math.random() * (cam.viewportHeight-50) + 50);
                     tube.reposition(tube.getPosTopTube().x + ((Tube.TUBE_WIDTH + TUBE_SPACING) * TUBE_COUNT));
                     coins.add(new Coin(cam.position.x + cam.viewportWidth + 30, number));
 
@@ -145,22 +142,23 @@ public class PlayState extends State
     {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
-
-
+        
         sb.draw(bg, cam.position.x - (cam.viewportWidth / 2), - MyTestGame.GROUND_Y_OFFSET / 2);
-        sb.draw(bird.getTexture(), bird.getPosition().x, bird.getPosition().y);
+
         for (Tube tube : tubes) {
             sb.draw(tube.getTopTube(), tube.getPosTopTube().x, tube.getPosTopTube().y);
             sb.draw(tube.getBottomTube(), tube.getPosBotTube().x, tube.getPosBotTube().y);
         }
+
+        sb.draw(ground, groundPos1.x, groundPos1.y);
+        sb.draw(ground, groundPos2.x, groundPos2.y);
 
         for (Coin coin: coins)
         {
             sb.draw(coin.getTexture(), coin.getPosition().x, coin.getPosition().y);
         }
 
-        sb.draw(ground, groundPos1.x, groundPos1.y);
-        sb.draw(ground, groundPos2.x, groundPos2.y);
+        sb.draw(bird.getTexture(), bird.getPosition().x, bird.getPosition().y);
 
         if (isPlayerDead)
         {

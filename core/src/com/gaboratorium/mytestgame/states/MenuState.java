@@ -2,8 +2,6 @@ package com.gaboratorium.mytestgame.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -123,7 +121,7 @@ public class MenuState extends State implements InputProcessor
     {
 
         cam.unproject(tp.set(Gdx.input.getX(), Gdx.input.getY(), 0));
-        Rectangle2D bounds = new Rectangle2D.Float(cam.viewportWidth / 2 - 50, cam.viewportHeight / 2 - 25, 100, 60);
+        Rectangle bounds = new Rectangle(cam.viewportWidth / 2 - 50, cam.viewportHeight / 2 - 25, 100, 60);
 
         if (bounds.contains(tp.x, tp.y))
         {

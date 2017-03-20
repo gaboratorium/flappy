@@ -20,7 +20,14 @@ public class Ghost
 
     public void update(Bird bird)
     {
-        position.x = bird.getPosition().x;
+        if (bird.getPosition().y > getPosition().y)
+        {
+            position.y++;
+        }
+        else
+        {
+            position.y--;
+        }
     }
 
     public void dispose()
