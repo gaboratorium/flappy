@@ -4,11 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.gaboratorium.mytestgame.MyTestGame;
 import com.gaboratorium.mytestgame.sprites.Bird;
+import com.gaboratorium.mytestgame.sprites.Coin;
 import com.gaboratorium.mytestgame.sprites.Tube;
 import com.sun.org.apache.xpath.internal.operations.Bool;
+
+import java.awt.geom.Rectangle2D;
+import java.util.Random;
 
 /**
  * Created by root on 3/7/17.
@@ -22,6 +27,7 @@ public class PlayState extends State
     // Objects
     private Bird bird;
     private Array<Tube> tubes;
+    private Array<Coin> coins;
     // Textures
     private Texture bg;
     private Texture ground;
@@ -29,6 +35,7 @@ public class PlayState extends State
     // Logic
     private Vector2 groundPos1, groundPos2;
     private Boolean isPlayerDead;
+    private int score;
 
 
 
@@ -39,6 +46,7 @@ public class PlayState extends State
         // Objects
         bird = new Bird(50, 200);
         tubes = new Array<Tube>();
+        coins = new Array<Coin>();
         // Textures
         bg = new Texture("bg.png");
         ground = new Texture("ground.png");
@@ -47,6 +55,7 @@ public class PlayState extends State
         groundPos1 = new Vector2(cam.position.x - cam.viewportWidth / 2, MyTestGame.GROUND_Y_OFFSET);
         groundPos2 = new Vector2((cam.position.x - cam.viewportWidth / 2) + ground.getWidth(), MyTestGame.GROUND_Y_OFFSET);
         isPlayerDead = false;
+        score = 0;
 
 
         for (int i = 1; i <= TUBE_COUNT; i++)
@@ -62,7 +71,26 @@ public class PlayState extends State
         {
             if (!isPlayerDead)
             {
-                bird.jump();
+                Vector3 tp = new Vector3();
+                cam.unproject(tp.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+
+                Boolean interacted = false;
+                for (Coin coin: coins)
+                {
+                    Rectangle2D bounds = new Rectangle2D.Float(coin.getPosition().x, coin.getPosition().y, coin.getTexture().getWidth(), coin.getTexture().getHeight());
+                    if (bounds.contains(tp.x, tp.y))
+                    {
+                        coin.explode();
+                        coins.removeIndex(coins.indexOf(coin, true));
+                        score++;
+                        interacted = true;
+                    }
+                }
+
+                if (!interacted)
+                {
+                    bird.jump();
+                }
             }
             else
             {
@@ -91,13 +119,15 @@ public class PlayState extends State
 
                 if (camPos > tubePos)
                 {
+                    int number = (int) Math.floor(Math.random() * cam.viewportHeight);
                     tube.reposition(tube.getPosTopTube().x + ((Tube.TUBE_WIDTH + TUBE_SPACING) * TUBE_COUNT));
+                    coins.add(new Coin(cam.position.x + cam.viewportWidth + 30, number));
+
                 }
 
                 if (tube.collides(bird.getBounds()))
                 {
-//                    gsm.set(new PlayState(gsm))
-                    handleDeath();
+//                    handleDeath();
                 }
             }
 
@@ -122,6 +152,11 @@ public class PlayState extends State
         for (Tube tube : tubes) {
             sb.draw(tube.getTopTube(), tube.getPosTopTube().x, tube.getPosTopTube().y);
             sb.draw(tube.getBottomTube(), tube.getPosBotTube().x, tube.getPosBotTube().y);
+        }
+
+        for (Coin coin: coins)
+        {
+            sb.draw(coin.getTexture(), coin.getPosition().x, coin.getPosition().y);
         }
 
         sb.draw(ground, groundPos1.x, groundPos1.y);

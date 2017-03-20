@@ -10,9 +10,12 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.gaboratorium.mytestgame.MyTestGame;
+
+import java.awt.geom.Rectangle2D;
 
 /**
  * Created by root on 3/6/17.
@@ -119,17 +122,14 @@ public class MenuState extends State implements InputProcessor
     public boolean touchDown(int screenX, int screenY, int pointer, int button)
     {
 
-
         cam.unproject(tp.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+        Rectangle2D bounds = new Rectangle2D.Float(cam.viewportWidth / 2 - 50, cam.viewportHeight / 2 - 25, 100, 60);
 
-
-        System.out.println("tp.x: " + tp.x + ", tp.y: " + tp.y);
-
-        if (playBtnSprite.getBoundingRectangle().contains(tp.x, tp.y))
+        if (bounds.contains(tp.x, tp.y))
         {
-            // Go to playstate
-            System.out.println("!!!!!!!!CLICKED!!!!!");
+            gsm.set(new PlayState(gsm));
         }
+
         return true;
     }
 

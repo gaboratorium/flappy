@@ -16,7 +16,7 @@ public class Bird
     private Vector3 position;
     private Vector3 velocity;
     private static final int GRAVITY = -15;
-    private static final int MOVEMENT = 100;
+    private static final int MOVEMENT = 80;
     private Rectangle bounds;
     private Animation birdAnimation;
     private Texture texture;
