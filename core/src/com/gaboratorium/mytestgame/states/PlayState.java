@@ -1,8 +1,11 @@
 package com.gaboratorium.mytestgame.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -34,6 +37,8 @@ public class PlayState extends State
     private Boolean isPlayerDead;
     private int score;
 
+    private BitmapFont scoreText;
+    private SpriteBatch hudBatch;
 
 
     protected PlayState(GameStateManager gsm)
@@ -53,6 +58,16 @@ public class PlayState extends State
         groundPos2 = new Vector2((cam.position.x - cam.viewportWidth / 2) + ground.getWidth(), MyTestGame.GROUND_Y_OFFSET);
         isPlayerDead = false;
         score = 0;
+
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("FiraSans-Regular.otf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+        fontParameter.size = 24;
+        fontParameter.borderColor = Color.BLACK;
+        fontParameter.borderWidth = 2;
+        scoreText = fontGenerator.generateFont(fontParameter);
+
+        hudBatch = new SpriteBatch();
 
 
         for (int i = 1; i <= TUBE_COUNT; i++)
@@ -142,7 +157,9 @@ public class PlayState extends State
     {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
-        
+
+
+
         sb.draw(bg, cam.position.x - (cam.viewportWidth / 2), - MyTestGame.GROUND_Y_OFFSET / 2);
 
         for (Tube tube : tubes) {
@@ -160,12 +177,19 @@ public class PlayState extends State
 
         sb.draw(bird.getTexture(), bird.getPosition().x, bird.getPosition().y);
 
+
         if (isPlayerDead)
         {
             sb.draw(retryButton, cam.position.x - 50, cam.viewportHeight / 2, 100, 60);
         }
 
+
         sb.end();
+
+
+        hudBatch.begin();
+        scoreText.draw(hudBatch, "Score: " + score, 20, 20);
+        hudBatch.end();
     }
 
     @Override
@@ -174,6 +198,7 @@ public class PlayState extends State
         ground.dispose();
         bg.dispose();
         bird.dispose();
+        scoreText.dispose();
         retryButton.dispose();
         for (Tube tube: tubes)
         {

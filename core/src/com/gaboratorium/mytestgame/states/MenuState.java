@@ -2,6 +2,7 @@ package com.gaboratorium.mytestgame.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -50,9 +51,11 @@ public class MenuState extends State implements InputProcessor
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
 
-        parameter.size = 18;
+        parameter.size = 20;
+        parameter.borderColor = Color.BLACK;
+        parameter.borderWidth = 2;
         title = fontGenerator.generateFont(parameter);
-        parameter.size = 14;
+        parameter.size = 16;
         highScoreType = fontGenerator.generateFont(parameter);
         titleLayout = new GlyphLayout(title, "Flappy Crappy Bird");
         highScoreTypeLayout = new GlyphLayout(highScoreType, "Highscore: " + MyTestGame.highscore);
