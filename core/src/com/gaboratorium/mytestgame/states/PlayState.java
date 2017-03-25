@@ -115,9 +115,13 @@ public class PlayState extends State
         float randomY = (float) Math.floor(Math.random() * (cam.viewportHeight - 50) + 50);
         clouds.add(new Cloud( cam.viewportWidth, randomY));
         randomY = (float) Math.floor(Math.random() * (cam.viewportHeight - 50) + 50);
-        clouds.add(new Cloud( cam.viewportWidth + 40, randomY));
+        clouds.add(new Cloud( cam.viewportWidth + 70, randomY));
         randomY = (float) Math.floor(Math.random() * (cam.viewportHeight - 50) + 50);
-        clouds.add(new Cloud( cam.viewportWidth + 80, randomY));
+        clouds.add(new Cloud( cam.viewportWidth + 140, randomY));
+        randomY = (float) Math.floor(Math.random() * (cam.viewportHeight - 50) + 50);
+        clouds.add(new Cloud( cam.viewportWidth + 210, randomY));
+        randomY = (float) Math.floor(Math.random() * (cam.viewportHeight - 50) + 50);
+        clouds.add(new Cloud( cam.viewportWidth + 280, randomY));
 
         //Logic
         groundPos1 = new Vector2(cam.position.x - cam.viewportWidth / 2, MyTestGame.GROUND_Y_OFFSET);
@@ -250,7 +254,7 @@ public class PlayState extends State
 
                 if (tube.collides(bird.getBounds()))
                 {
-//                    handleDeath();
+                    handleDeath();
                 }
             }
 
@@ -280,6 +284,14 @@ public class PlayState extends State
             for (Cloud cloud: clouds)
             {
                 cloud.update(dt);
+                double camPos = cam.position.x - (cam.viewportWidth / 2);
+                double cloudPos = cloud.getPosition().x + cloud.getSize().getWidth();
+
+                if (camPos > cloudPos)
+                {
+                    float randomY = (float) Math.floor(Math.random() * (cam.viewportHeight - 50) + 50);
+                    cloud.setPosition(cam.position.x + cam.viewportWidth + 20, randomY);
+                }
             }
 
             if (bird.getPosition().y <= ground.getHeight() + MyTestGame.GROUND_Y_OFFSET)

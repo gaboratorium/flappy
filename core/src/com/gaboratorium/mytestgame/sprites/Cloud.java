@@ -43,11 +43,19 @@ public class Cloud
 
     public Vector2 getPosition() { return position; }
 
+    public void setPosition(float x, float y)
+    {
+        position.x = x;
+        position.y = y;
+    }
+
     public Size getSize() { return size; }
 
     public void update(float dt)
     {
-        position.add(70 * dt, 0);
+        position.add(65 * dt, 0);
+
+
     }
 
     public void dispose()
