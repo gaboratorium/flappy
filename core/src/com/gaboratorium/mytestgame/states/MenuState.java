@@ -8,11 +8,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.gaboratorium.mytestgame.MyTestGame;
+import com.gaboratorium.mytestgame.helpers.Size;
 
 import java.awt.geom.Rectangle2D;
 
@@ -23,13 +25,23 @@ import java.awt.geom.Rectangle2D;
 public class MenuState extends State implements InputProcessor
 {
     private Texture background;
+
     private Texture playBtn;
+    private Vector2 playBtnPos;
+    private Size playBtnSize;
+
     private Texture ground;
     private Vector2 groundPos1;
     private BitmapFont title;
     private BitmapFont highScoreType;
     private GlyphLayout highScoreTypeLayout;
     private GlyphLayout titleLayout;
+
+    private BitmapFont creditsNameText;
+    private BitmapFont creditsWebText;
+    private GlyphLayout creditsNameTextLayout;
+    private GlyphLayout creditsWebTextLayout;
+
     private FreeTypeFontGenerator fontGenerator;
     private Sprite playBtnSprite;
 
@@ -38,9 +50,13 @@ public class MenuState extends State implements InputProcessor
     {
         super(gsm);
         cam.setToOrtho(false, MyTestGame.WIDTH / 2, MyTestGame.HEIGHT / 2);
-        background = new Texture("bg.png");
-        playBtn = new Texture("play.png");
+        background = new Texture("bg_dark.png");
+
+        playBtn = new Texture("playbtn.png");
         playBtnSprite = new Sprite(playBtn);
+        playBtnSize = new Size(50, 50);
+        playBtnPos = new Vector2(cam.viewportWidth / 2 - playBtnSize.getWidth() / 2, cam.viewportHeight / 2 - 25);
+
         ground = new Texture("ground.png");
         groundPos1 = new Vector2(cam.position.x - cam.viewportWidth / 2, MyTestGame.GROUND_Y_OFFSET);
         title = new BitmapFont();
@@ -48,16 +64,25 @@ public class MenuState extends State implements InputProcessor
 
         // Creating a font generator
         fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("FiraSans-Regular.otf"));
+        FreeTypeFontGenerator fontGeneratorForTitle = new FreeTypeFontGenerator(Gdx.files.internal("Nightmare Before Christmas.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
+        parameter.size = 10;
 
-        parameter.size = 20;
+        creditsNameText = fontGenerator.generateFont(parameter);
+        creditsWebText = fontGenerator.generateFont(parameter);
+        creditsNameTextLayout = new GlyphLayout(creditsNameText, "by Gábor Pintér");
+        creditsWebTextLayout = new GlyphLayout(creditsNameText, "gaboratorium.com");
+
+        parameter.size = 34;
         parameter.borderColor = Color.BLACK;
         parameter.borderWidth = 2;
-        title = fontGenerator.generateFont(parameter);
+        parameter.color = new Color(0, 208, 255, 1);
+        title = fontGeneratorForTitle.generateFont(parameter);
         parameter.size = 16;
+        parameter.color = new Color(1, 1, 1, 1);
         highScoreType = fontGenerator.generateFont(parameter);
-        titleLayout = new GlyphLayout(title, "Flappy Crappy Bird");
+        titleLayout = new GlyphLayout(title, MyTestGame.TITLE);
         highScoreTypeLayout = new GlyphLayout(highScoreType, "Highscore: " + MyTestGame.highscore);
 
         Gdx.input.setInputProcessor(this);
@@ -82,8 +107,13 @@ public class MenuState extends State implements InputProcessor
         sb.draw(background, cam.position.x - (cam.viewportWidth / 2), - MyTestGame.GROUND_Y_OFFSET / 2);
         title.draw(sb, titleLayout, cam.viewportWidth / 2 - titleLayout.width / 2, cam.viewportHeight / 2 + 100);
         highScoreType.draw(sb, highScoreTypeLayout, cam.viewportWidth / 2 - highScoreTypeLayout.width / 2, cam.viewportHeight / 2 + 65);
-        sb.draw(playBtnSprite,  cam.viewportWidth / 2 - 50, cam.viewportHeight / 2 - 25, 100, 60);
+        sb.draw(playBtnSprite, playBtnPos.x, playBtnPos.y, playBtnSize.getWidth(), playBtnSize.getHeight());
+
+        creditsNameText.draw(sb, creditsWebTextLayout, cam.viewportWidth / 2 - creditsWebTextLayout.width / 2, 110);
+        creditsWebText.draw(sb, creditsNameTextLayout, cam.viewportWidth / 2 - creditsNameTextLayout.width / 2, 125);
+
         sb.draw(ground, groundPos1.x, groundPos1.y);
+
         sb.end();
     }
 
@@ -124,7 +154,7 @@ public class MenuState extends State implements InputProcessor
     {
 
         cam.unproject(tp.set(Gdx.input.getX(), Gdx.input.getY(), 0));
-        Rectangle bounds = new Rectangle(cam.viewportWidth / 2 - 50, cam.viewportHeight / 2 - 25, 100, 60);
+        Rectangle bounds = new Rectangle(playBtnPos.x, playBtnPos.y, playBtnSize.getWidth(), playBtnSize.getHeight());
 
         if (bounds.contains(tp.x, tp.y))
         {

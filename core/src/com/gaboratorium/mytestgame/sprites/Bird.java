@@ -16,19 +16,36 @@ public class Bird
     private Vector3 position;
     private Vector3 velocity;
     private static final int GRAVITY = -15;
-    private static final int MOVEMENT = 80;
+    private int movement = 80;
     private Rectangle bounds;
     private Animation birdAnimation;
     private Texture texture;
     private Sound flap;
 
+    private Texture puffTexture;
+    private Animation puffAnimation;
+
+    private float textureWidth;
+    private float textureHeight;
+    private int boundsOffset;
+
     public Bird(int x, int y)
     {
         position = new Vector3(x, y, 0);
         velocity = new Vector3(0, 0, 0);
-        texture = new Texture("birdanimation.png");
-        birdAnimation = new Animation(new TextureRegion(texture), 3, 0.5f);
-        bounds = new Rectangle(x, y, texture.getWidth() / 3, texture.getHeight());
+        texture = new Texture("magic.png");
+
+        textureWidth = 60;
+        textureHeight = 60;
+
+        boundsOffset = 10;
+
+        birdAnimation = new Animation(new TextureRegion(texture), 4, 0.5f);
+        bounds = new Rectangle(x + boundsOffset, y + boundsOffset, textureWidth - (2 * boundsOffset), textureHeight - (2 * boundsOffset));
+
+        puffTexture = new Texture("puff.png");
+        puffAnimation = new Animation(new TextureRegion(puffTexture), 3, 0.5f);
+
         flap = Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"));
     }
 
@@ -41,14 +58,19 @@ public class Bird
         }
 
         velocity.scl(dt);
-        position.add(MOVEMENT * dt, velocity.y, 0);
+        position.add(movement * dt, velocity.y, 0);
 
         if (position.y < 0)
         {
             position.y = 0;
         }
         velocity.scl(1/dt);
-        bounds.setPosition(position.x, position.y);
+        bounds.setPosition(position.x + boundsOffset, position.y + boundsOffset);
+    }
+
+    public void increaseMovement()
+    {
+        movement += 1;
     }
 
     public Vector3 getPosition()
@@ -61,9 +83,13 @@ public class Bird
         return birdAnimation.getFrame();
     }
 
+    public float getTextureWidth() { return textureWidth; }
+    public float getTextureHeight() { return textureHeight; }
+
     public void jump()
     {
-        velocity.y  = 250;
+
+        velocity.y  = 270;
         flap.play(0.5f);
     }
 

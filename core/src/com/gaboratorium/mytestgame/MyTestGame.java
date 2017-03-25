@@ -14,7 +14,7 @@ public class MyTestGame extends ApplicationAdapter {
 	public static final int WIDTH = 480;
 	public static final int HEIGHT = 800;
 	public static final int GROUND_Y_OFFSET = -70;
-	public static final String TITLE = "MyTestGame";
+	public static final String TITLE = "Flappy Hermelin";
 	public static int highscore;
 
 	private GameStateManager gsm;
@@ -39,7 +39,7 @@ public class MyTestGame extends ApplicationAdapter {
 		music = Gdx.audio.newMusic(Gdx.files.internal("march_of_the_spoons.mp3"));
 		music.setLooping(true);
 		music.setVolume(0.2f);
-		music.play();
+//		music.play();
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		gsm.push(new MenuState(gsm));
 	}
@@ -47,14 +47,10 @@ public class MyTestGame extends ApplicationAdapter {
 	@Override
 	public void render () {
 
-		// TODO: handleInput only on button click
-		// TODO: track score during playstate and print out on death
-		// TODO: add flying coins and enemies
-		// TODO: if score is higher than the previously saved, save it
-		// TODO: change sprites and add sounds
-		// TODO: Make a loading screen
-		// TODO: Make a return to menu button on death
-		// TODO: Menu: Play, with highscore and credits
+		// TODO: dispose objects outside of cam (coins, minions)
+		// TODO: Add clouds
+		// TODO: add sounds (coin pickup, minion kill, death, another jump sound)
+		// TODO: Change icon
 		// TODO: publish to Play Store
 
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
