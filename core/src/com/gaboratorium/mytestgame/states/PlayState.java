@@ -53,6 +53,7 @@ public class PlayState extends State
     private Vector2 groundPos1, groundPos2, bgfgPos1, bgfgPos2;
     private Boolean isPlayerDead;
     private int score;
+    private int highscore;
 
     private Array<Minion> minions;
     private Array<Explosion> explosions;
@@ -105,6 +106,7 @@ public class PlayState extends State
         gameOverSound = Gdx.audio.newSound(Gdx.files.internal("glass.mp3"));
         gameOverSound2 = Gdx.audio.newSound(Gdx.files.internal("glass2.mp3"));
 
+
         retryButton = new Texture("retrybtn.png");
         retryButtonSize = new Size(50, 50);
 
@@ -132,7 +134,7 @@ public class PlayState extends State
 
         isPlayerDead = false;
         score = 0;
-        int highscore = Gdx.app.getPreferences("gamePreferences").getInteger("highScore");
+        highscore = Gdx.app.getPreferences("gamePreferences").getInteger("highScore");
 
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("FiraSans-Regular.otf"));
         FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -159,7 +161,7 @@ public class PlayState extends State
 
         for (int i = 1; i <= TUBE_COUNT; i++)
         {
-            tubes.add(new Tube(i * (TUBE_SPACING + Tube.TUBE_WIDTH)));
+            tubes.add(new Tube(i * (TUBE_SPACING + Tube.TUBE_WIDTH) + 175));
         }
     }
 
@@ -231,7 +233,7 @@ public class PlayState extends State
         if (!isPlayerDead)
         {
             updateBackgroundMovement();
-            bird.update(dt);
+            bird.update(dt, cam);
             cam.position.x = bird.getPosition().x + 80;
 
             bgfgPos1.add(50 * dt, 0);
@@ -407,7 +409,7 @@ public class PlayState extends State
         {
             hudBatch.setProjectionMatrix(cam.projection);
             hudBatch.begin();
-            scoreText.draw(hudBatch, "Score: " + score, -cam.viewportWidth/2 + 10, -cam.viewportHeight/2 + scoreTextLayout.height + 10);
+            scoreText.draw(hudBatch,  String.valueOf(score), -cam.viewportWidth/2 + 10, cam.viewportHeight / 2 - 10);
             hudBatch.end();
         }
     }
@@ -467,21 +469,21 @@ public class PlayState extends State
         int flippedCoin = (int) Math.floor(Math.random()*2);
         if (flippedCoin == 0)
         {
-            gameOverSound.play();
+            gameOverSound.play(.3f);
         }
         else
         {
-            gameOverSound2.play();
+            gameOverSound2.play(.3f);
         }
 
         isPlayerDead = true;
         scoreTextLayout = new GlyphLayout(scoreText, "Score: " + score);
         retryButtonPos = new Vector2(cam.position.x - retryButtonSize.getWidth() / 2, cam.viewportHeight / 10 * 4);
         Preferences preferences = Gdx.app.getPreferences("gamePreferences");
-        int highscore = preferences.getInteger("highScore");
         if (score > highscore)
         {
             preferences.putInteger("highScore", score);
+            preferences.flush();
         }
     }
 

@@ -52,7 +52,7 @@ public class Coin
 
     public void playPickupSound()
     {
-        pickupSound.play(0.25f);
+        pickupSound.play(0.15f);
     }
 
 }

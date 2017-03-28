@@ -38,20 +38,14 @@ public class MyTestGame extends ApplicationAdapter {
 		highscore = preferences.getInteger("highScore");
 		music = Gdx.audio.newMusic(Gdx.files.internal("march_of_the_spoons.mp3"));
 		music.setLooping(true);
-		music.setVolume(0.2f);
-//		music.play();
+		music.setVolume(0.4f);
+		music.play();
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		gsm.push(new MenuState(gsm));
 	}
 
 	@Override
 	public void render () {
-
-		// TODO: dispose objects outside of cam (coins, minions)
-		// TODO: Add clouds
-		// TODO: add sounds (coin pickup, minion kill, death, another jump sound)
-		// TODO: Change icon
-		// TODO: publish to Play Store
 
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		gsm.update(Gdx.graphics.getDeltaTime());

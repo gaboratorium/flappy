@@ -1,5 +1,7 @@
 package com.gaboratorium.mytestgame.sprites;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -17,13 +19,39 @@ public class Minion
     private float width;
     private float height;
     private Rectangle bounds;
+    private Sound deathSound;
+    private Sound spawnSound;
 
     public Minion(float posX, float posY)
     {
         position = new Vector3(posX, posY, 0);
+        deathSound = Gdx.audio.newSound(Gdx.files.internal("woya.wav"));
+
         String texture_filename;
-        double rand = Math.floor(Math.random() * 3.5);
-        texture_filename = rand > 2 ? "bat_laughing.png" : rand > 1 ? "bat.png" : "pumpkin.png";
+        String spawnSound_filename;
+        int rand = (int) Math.floor(Math.random() * 3);
+
+        switch(rand)
+        {
+            case 0:
+                texture_filename = "bat_laughing.png";
+                break;
+            case 1:
+                texture_filename = "bat.png";
+                break;
+            case 2:
+                texture_filename = "pumpkin.png";
+                break;
+            default:
+                texture_filename = "bat.png";
+                break;
+        }
+
+        if (Math.floor(Math.random() * 2) == 0)
+        {
+            spawnSound = Gdx.audio.newSound(Gdx.files.internal("laugh3.ogg"));
+            spawnSound.play();
+        }
 
         texture = new Texture(texture_filename);
         animation = new Animation(new TextureRegion(texture), 4, 0.5f);
@@ -53,7 +81,9 @@ public class Minion
 
     public void die()
     {
+        deathSound.play();
         dispose();
+
     }
 
     public void dispose()
