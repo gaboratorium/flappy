@@ -37,10 +37,15 @@ public class MenuState extends State implements InputProcessor
     private GlyphLayout highScoreTypeLayout;
     private GlyphLayout titleLayout;
 
-    private BitmapFont creditsNameText;
-    private BitmapFont creditsWebText;
-    private GlyphLayout creditsNameTextLayout;
-    private GlyphLayout creditsWebTextLayout;
+    // New stuff
+    private BitmapFont instructionsText;
+    private BitmapFont minionsText;
+    private BitmapFont coinsText;
+    private BitmapFont tapText;
+    private GlyphLayout instructionsTextLayout;
+    private GlyphLayout minionsTextLayout;
+    private GlyphLayout coinsTextLayout;
+    private GlyphLayout tapTextLayout;
 
     private FreeTypeFontGenerator fontGenerator;
     private Sprite playBtnSprite;
@@ -69,10 +74,17 @@ public class MenuState extends State implements InputProcessor
 
         parameter.size = 10;
 
-        creditsNameText = fontGenerator.generateFont(parameter);
-        creditsWebText = fontGenerator.generateFont(parameter);
-        creditsNameTextLayout = new GlyphLayout(creditsNameText, "by Gábor Pintér");
-        creditsWebTextLayout = new GlyphLayout(creditsNameText, "gaboratorium.com");
+        // New stuff
+        instructionsText = fontGenerator.generateFont(parameter);
+        minionsText = fontGenerator.generateFont(parameter);
+        coinsText = fontGenerator.generateFont(parameter);
+        tapText = fontGenerator.generateFont(parameter);
+
+        instructionsTextLayout = new GlyphLayout(instructionsText, "Instructions");
+        minionsTextLayout = new GlyphLayout(minionsText, "Tap on minions to smash them");
+        coinsTextLayout = new GlyphLayout(coinsText, "Tap on coins to collect them");
+        tapTextLayout = new GlyphLayout(tapText, "Tap anywhere else to flap");
+
 
         parameter.size = 34;
         parameter.borderColor = Color.BLACK;
@@ -109,8 +121,10 @@ public class MenuState extends State implements InputProcessor
         highScoreType.draw(sb, highScoreTypeLayout, cam.viewportWidth / 2 - highScoreTypeLayout.width / 2, cam.viewportHeight / 2 + 65);
         sb.draw(playBtnSprite, playBtnPos.x, playBtnPos.y, playBtnSize.getWidth(), playBtnSize.getHeight());
 
-        creditsNameText.draw(sb, creditsWebTextLayout, cam.viewportWidth / 2 - creditsWebTextLayout.width / 2, 110);
-        creditsWebText.draw(sb, creditsNameTextLayout, cam.viewportWidth / 2 - creditsNameTextLayout.width / 2, 125);
+        instructionsText.draw(sb, instructionsTextLayout, cam.viewportWidth / 2 - instructionsTextLayout.width / 2, 155);
+        minionsText.draw(sb, minionsTextLayout, cam.viewportWidth / 2 - minionsTextLayout.width / 2, 140);
+        coinsText.draw(sb, coinsTextLayout, cam.viewportWidth / 2 - coinsTextLayout.width / 2, 125);
+        tapText.draw(sb, tapTextLayout, cam.viewportWidth / 2 - tapTextLayout.width / 2, 110);
 
         sb.draw(ground, groundPos1.x, groundPos1.y);
 

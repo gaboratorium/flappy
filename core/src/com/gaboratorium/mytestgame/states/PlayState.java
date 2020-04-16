@@ -344,7 +344,6 @@ public class PlayState extends State
 
     private void handleSpawnCoin(int tubeCounter)
     {
-
         if (tubeCounter  % 2 == 1)
         {
             boolean isSinking = Math.floor(Math.random() * 2) == 0;
