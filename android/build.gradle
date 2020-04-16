@@ -18,9 +18,9 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "com.gaboratorium.mytestgame"
+        applicationId "com.gaboratorium.flappyHermelin"
         minSdkVersion 9
-        targetSdkVersion 25
+        targetSdkVersion 26
     }
 }
 
@@ -71,7 +71,7 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.gaboratorium.mytestgame/com.gaboratorium.mytestgame.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.gaboratorium.flappyHermelin/com.gaboratorium.flappyHermelin.AndroidLauncher'
 }
 
 // sets up the Android Eclipse project, using the old Ant based build.

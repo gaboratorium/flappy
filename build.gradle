@@ -20,7 +20,7 @@ allprojects {
 
     version = '1.0'
     ext {
-        appName = "myTestGame"
+        appName = "flappyHermelin"
         gdxVersion = '1.9.6'
         roboVMVersion = '2.3.0'
         box2DLightsVersion = '1.4'
@@ -29,6 +29,7 @@ allprojects {
     }
 
     repositories {
+        jcenter()
         google()
         mavenLocal()
         mavenCentral()
